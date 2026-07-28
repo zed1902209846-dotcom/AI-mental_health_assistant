@@ -48,11 +48,11 @@ public enum ResultCode {
         this.msg = msg;
 
     }
-//    public String getCode() {
-//        return code;
-//    }
-//    public String getMsg() {
-//        return msg;
-//    }
+    public String getCode() {
+        return code;
+    }
+    public String getMsg() {
+        return msg;
+    }
 
 }
