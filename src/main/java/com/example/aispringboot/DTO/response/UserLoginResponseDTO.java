@@ -26,7 +26,7 @@ public class UserLoginResponseDTO {
 //            "updatedAt": "2026-07-10 10:47:02"
 @Data
     public static class UserDetailResponseDTO {
-        private long id;
+        private Long id;
         private String username;
         private String email;
         private String nickname;
