@@ -1,5 +1,6 @@
 package com.example.aispringboot.common;
 
+import com.example.aispringboot.exception.BusinessException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,5 +18,16 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
         return Result.error(ResultCode.PARAM_ERROR.getCode(),ResultCode.PARAM_ERROR.getMsg(), errorMessage);
+    }
+
+    //处理业务异常
+    @ExceptionHandler(BusinessException.class)
+    public Result<?> handlerException(BusinessException e) {
+        //如果异常携带额外的数据
+        if (e.getData() != null) {
+            return Result.error(e.getCode(), e.getMessage(), e.getData());
+        }
+        //如果没有携带额外的数据
+        return Result.error(e.getCode(), e.getMessage(),null);
     }
 }

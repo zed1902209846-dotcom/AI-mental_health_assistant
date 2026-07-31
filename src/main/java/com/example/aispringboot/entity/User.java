@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.example.aispringboot.enumClass.UserStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -84,12 +85,12 @@ public class User {
 //        return UserType.USER.getCode().equals(this.userType);
 //    }
 //
-//    /**
-//     * 是否为正常状态
-//     */
-//    public boolean isActive() {
-//        return UserStatus.NORMAL.getCode().equals(this.status);
-//    }
+    /**
+     * 是否为正常状态
+     */
+    public boolean isActive() {
+        return UserStatus.NORMAL.getCode().equals(this.status);
+    }
 //
 //    /**
 //     * 是否被禁用
