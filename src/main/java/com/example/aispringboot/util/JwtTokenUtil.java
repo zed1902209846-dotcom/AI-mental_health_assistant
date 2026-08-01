@@ -3,11 +3,14 @@ package com.example.aispringboot.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.aispringboot.config.JwtConfig;
+import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class JwtTokenUtil implements ApplicationContextAware  {
     private static final String ISSUER = "mental-health-assistant";
 
@@ -24,7 +27,7 @@ public class JwtTokenUtil implements ApplicationContextAware  {
 
 
     //生成token的方法
-    public static String generateToken(String userId, String username, Integer roleType) {
+    public static String generateToken(Long userId, String username, Integer roleType) {
         try{
             // 获取 jwt 的配置
             JwtConfig jwtConfig = getJwtConfig();
