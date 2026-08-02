@@ -18,6 +18,7 @@ public class User {
     @Resource
     private UserService userService;
 
+    //用户登录接口
     @PostMapping("/login")
     public Result<UserLoginResponseDTO> login(@Valid @RequestBody UserLoginCommandDTO commandDTO) {
 
@@ -27,4 +28,9 @@ public class User {
         return Result.ok(result);
 
        }
+       //用户注册接口
+    @PostMapping("/add")
+    public Result<UserLoginResponseDTO.UserDetailResponseDTO> register(@Valid @RequestBody UserLoginCommandDTO commandDTO) {
+        return null;
+    }
 }

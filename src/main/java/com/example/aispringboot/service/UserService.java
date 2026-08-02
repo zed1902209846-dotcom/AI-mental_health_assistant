@@ -3,7 +3,6 @@ package com.example.aispringboot.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.aispringboot.DTO.command.UserLoginCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
-import com.example.aispringboot.common.Result;
 import com.example.aispringboot.entity.User;
 import com.example.aispringboot.exception.BusinessException;
 import com.example.aispringboot.mapper.UserMapper;
