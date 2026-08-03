@@ -1,7 +1,7 @@
 package com.example.aispringboot.config;
 
 import cn.hutool.core.text.AntPathMatcher;
-import com.example.aispringboot.util.JwtAuthticationFilter;
+import com.example.aispringboot.util.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -33,8 +33,8 @@ public class SecurityConfig {
         return false;
     }
     @Bean
-    public JwtAuthticationFilter jwtAuthticationFilter() {
-        return new JwtAuthticationFilter();
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,7 +51,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 //添加 JWT认证过滤器
-                .addFilterBefore(jwtAuthticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
     }
