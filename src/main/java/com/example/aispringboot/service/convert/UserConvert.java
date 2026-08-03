@@ -1,7 +1,11 @@
 package com.example.aispringboot.service.convert;
 
+import com.example.aispringboot.DTO.command.UserRegisterCommandDTO;
 import com.example.aispringboot.DTO.response.UserLoginResponseDTO;
 import com.example.aispringboot.entity.User;
+import com.example.aispringboot.enumClass.UserStatus;
+
+import java.time.LocalDateTime;
 
 public class UserConvert {
     //构建响应 DTO
@@ -30,6 +34,22 @@ public class UserConvert {
                 .userInfo(userInfo)
                 .token(token)
                 .roleType(userInfo.getUserType().toString())
+                .build();
+    }
+
+    public static User registerCommandToEntity(UserRegisterCommandDTO commandDTO, String encodedPassword){
+        return User.builder()
+                .username(commandDTO.getUsername())
+                .email(commandDTO.getEmail())
+                .password(encodedPassword)
+                .nickname(commandDTO.getNickname())
+                .phone(commandDTO.getPhone())
+                .gender(commandDTO.getGender())
+                .birthday(commandDTO.getBirthday())
+                .userType(commandDTO.getUserType())
+                .status(UserStatus.NORMAL.getCode())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 

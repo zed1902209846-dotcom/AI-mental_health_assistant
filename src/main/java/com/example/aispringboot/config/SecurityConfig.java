@@ -1,5 +1,7 @@
 package com.example.aispringboot.config;
 
+import cn.hutool.core.text.AntPathMatcher;
+import com.example.aispringboot.util.JwtAuthticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -8,18 +10,32 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
     private static final String[] PUBLIC_PATHS = {
             "/",
             "/api/text",
-            "/api/user/login"
-
+            "/api/user/login",
+            "/api/user/add"
     };
 
+    public static Boolean isPublicPATH(String requesturl) {
+        for (String publicPath : PUBLIC_PATHS) {
+            if (antPathMatcher.match(publicPath, requesturl)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    @Bean
+    public JwtAuthticationFilter jwtAuthticationFilter() {
+        return new JwtAuthticationFilter();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -33,7 +49,9 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_PATHS).permitAll()
                         //其他路径都需要登录
                         .anyRequest().authenticated()
-                );
+                )
+                //添加 JWT认证过滤器
+                .addFilterBefore(jwtAuthticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
     }

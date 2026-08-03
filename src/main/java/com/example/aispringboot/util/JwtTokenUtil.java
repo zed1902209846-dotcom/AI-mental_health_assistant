@@ -3,10 +3,12 @@ package com.example.aispringboot.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.aispringboot.config.JwtConfig;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -49,5 +51,17 @@ public class JwtTokenUtil implements ApplicationContextAware  {
         }catch (Exception e){
             throw new RuntimeException("生成token失败:" + e);
         }
-       }
+    }
+    //提取token
+    public static String extractTokenFromRequest(HttpServletRequest request) {
+        if (request==null){
+            return null;
+        }
+
+        String tokenHeader = request.getHeader("token");
+        if (StringUtils.hasText(tokenHeader)){
+            return tokenHeader;
+        }
+        return null;
+    }
 }
