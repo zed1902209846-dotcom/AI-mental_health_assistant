@@ -2,9 +2,13 @@ package com.example.aispringboot.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 import com.example.aispringboot.config.JwtConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -63,5 +67,62 @@ public class JwtTokenUtil implements ApplicationContextAware  {
             return tokenHeader;
         }
         return null;
+    }
+    //验证token
+    public static TokenValidationResult validateToken(String token){
+        //ai 新增(有了这段代码,无效 token 会转成 return null,让
+        // validateToken 的调用方(过滤器)能正常判断并返回 401,
+        // 把"token 无效"当作业务上的正常分支处理,而不是系统崩溃)
+        DecodedJWT jwt;
+        try {
+            jwt = verifyToken(token);
+        } catch (JWTVerificationException e) {
+            return null;
+        }
+        //
+        Long userId = jwt.getClaim("userId").asLong();
+        String username = jwt.getClaim("username").asString();
+        //角色类型有点特殊
+        Integer roleType = null ;
+        try{
+            roleType = jwt.getClaim("roleType").asInt();
+        }catch (Exception e){
+            String roleTypeStr = jwt.getClaim("roleType").asString();
+            if (StringUtils.hasText(roleTypeStr)){
+                roleType = Integer.valueOf(roleTypeStr);
+
+            }
+        }
+        if (userId != null && StringUtils.hasText(username) && roleType != null){
+            return new TokenValidationResult(userId, username, roleType, true);
+        }
+        return null;
+    }
+    //验证token的有效性
+    public static DecodedJWT verifyToken(String token) {
+        if (!StringUtils.hasText(token)) {
+            throw new JWTVerificationException("token不能为空");
+        }
+        //token解码
+        JwtConfig jwtConfig = getJwtConfig();
+        Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
+        JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
+        return verifier.verify(token);
+    }
+
+    //token验证结果返回类
+    @Getter
+    public static class TokenValidationResult {
+        private final Long userId;
+        private final String username;
+        private final Integer roleType;
+        private final boolean valid;
+
+        public TokenValidationResult(Long userId, String username, Integer roleType, boolean valid) {
+            this.userId = userId;
+            this.username = username;
+            this.roleType = roleType;
+            this.valid = valid;
+        }
     }
 }
