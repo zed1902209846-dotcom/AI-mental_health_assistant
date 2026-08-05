@@ -2,8 +2,10 @@ package com.example.aispringboot.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.example.aispringboot.DTO.command.ConsultationSessionCreateDTO;
+import com.example.aispringboot.common.ResultCode;
 import com.example.aispringboot.entity.ConsultationSession;
 import com.example.aispringboot.entity.User;
+import com.example.aispringboot.exception.BusinessException;
 import com.example.aispringboot.mapper.ConsultationSessionMapper;
 import com.example.aispringboot.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,6 @@ public class ConsultationSessionService {
             consultationSessionMapper.insert(session);
             return session;
         }
-
-        return null;
-    }
+        throw new BusinessException(ResultCode.USER_NOT_EXIST.getMsg());
+       }
 }

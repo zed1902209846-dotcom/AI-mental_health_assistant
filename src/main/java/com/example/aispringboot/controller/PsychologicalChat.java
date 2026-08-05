@@ -24,7 +24,8 @@ public class PsychologicalChat {
         String token = JwtTokenUtil.getCurrentToken();
         DecodedJWT jwt = JwtTokenUtil.verifyToken(token);
         Long userId = jwt.getClaim("userId").asLong();
-        psychologicalSupportService.startSession(userId,createDTO);
-        return null;
+
+        StructOutPut.StreamChatSession session = psychologicalSupportService.startSession(userId,createDTO);
+        return Result.ok(session);
     }
 }
