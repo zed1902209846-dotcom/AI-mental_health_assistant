@@ -1,5 +1,7 @@
 package com.example.aispringboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.aispringboot.DTO.response.ConsultationMessageResponseDTO;
 import com.example.aispringboot.entity.ConsultationMessage;
 import com.example.aispringboot.mapper.ConsultationMessageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,64 @@ public class ConsultationMessageService {
                 .build();
         consultationMessageMapper.insert(userMessage);
         return userMessage;
+    }
+
+    public ConsultationMessage saveAiMessage(Long sessionId, String content,  String aiModel) {
+        //构建AI助手消息实体
+         ConsultationMessage AiMessage = ConsultationMessage.builder()
+                .sessionId(sessionId)
+                .senderType(2)
+                .messageType(1)
+                .content(content)
+                .aiModel(aiModel)
+                .createdAt(LocalDateTime.now())
+                .build();
+         //插入AI助手消息到数据库
+        consultationMessageMapper.insert(AiMessage);
+        return AiMessage;
+    }
+
+    public Integer getMessageCountBySessionId(Long sessionId) {
+        LambdaQueryWrapper<ConsultationMessage> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ConsultationMessage::getSessionId, sessionId);
+        return consultationMessageMapper.selectCount(queryWrapper).intValue();
+    }
+
+    //获取会话的最后一条数据
+    public ConsultationMessageResponseDTO getLastMessageBySessionId(Long sessionId) {
+        LambdaQueryWrapper<ConsultationMessage> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ConsultationMessage::getSessionId, sessionId)
+                .orderByDesc(ConsultationMessage::getCreatedAt)
+                .last("limit 1");
+
+        ConsultationMessage lastMessage = consultationMessageMapper.selectOne(queryWrapper);
+        return lastMessage != null ? convertToResponseDTO(lastMessage) : null;
+    }
+
+    private ConsultationMessageResponseDTO convertToResponseDTO(ConsultationMessage message) {
+        if (message == null) {
+            return null;
+        }
+
+        // 手动逐字段赋值，确保转换的准确性和可控性
+        ConsultationMessageResponseDTO responseDTO = new ConsultationMessageResponseDTO();
+        responseDTO.setId(message.getId());
+        responseDTO.setSessionId(message.getSessionId());
+        responseDTO.setSenderType(message.getSenderType());
+        responseDTO.setMessageType(message.getMessageType());
+        responseDTO.setContent(message.getContent());
+        responseDTO.setEmotionTag(message.getEmotionTag());
+        responseDTO.setAiModel(message.getAiModel());
+        responseDTO.setCreatedAt(message.getCreatedAt());
+
+        // 设置描述字段（通过实体方法获取）
+        responseDTO.setSenderTypeDesc(message.getSenderTypeDesc());
+        responseDTO.setMessageTypeDesc(message.getMessageTypeDesc());
+
+        // 计算消息长度
+        responseDTO.calculateContentLength();
+
+        return responseDTO;
     }
 
 }

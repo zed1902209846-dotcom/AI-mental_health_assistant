@@ -4,6 +4,19 @@ spring:
     username: root
     password: 12345678
 
+  ai:
+    openai:
+      api-key: sk-fwbeycexnywlqkjafcpnxgvhonjevikxgrfyrdxraubhchkz
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+          model: deepseek-ai/DeepSeek-V3
+          tool-calling:
+            enabled: true
+        completions-path: /v1/chat/completions
+
+
+
 server:
   port: 1236
 # JWT配置
