@@ -63,6 +63,6 @@ public class PsychologicalChat {
                         .data("{}")
                         .build()
                 ))
-                .delayElements(Duration.ofMillis(50));//添加延迟，避免流过快
+                .delayElements(Duration.ofMillis(40));//添加延迟，避免流过快
     }
 }

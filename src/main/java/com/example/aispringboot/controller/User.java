@@ -24,7 +24,7 @@ public class User {
 
         //调用服务层方法
         UserLoginResponseDTO result = userService.login(commandDTO);
-        System.out.println(result);
+        //System.out.println(result);
         return Result.ok(result);
 
        }

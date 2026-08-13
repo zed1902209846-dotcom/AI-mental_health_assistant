@@ -30,7 +30,7 @@ public class UserService {
                 .eq(User::getEmail, commandDTO.getUsername());
         //调用 MP的 API查询
         User user = userMapper.selectOne(queryWrapper);
-        System.out.println(user);
+//        System.out.println(user);
 
         //判断用户是否存在
         if (user == null) {
@@ -50,13 +50,13 @@ public class UserService {
 
         //生成 JWT 令牌
         String token = JwtTokenUtil.generateToken(user.getId(), user.getUsername(), user.getUserType() );
-        System.out.println(token);
+        //System.out.println(token);
         UserLoginResponseDTO.UserDetailResponseDTO userInfo = UserConvert.entityToDetailResponse(user);
         return UserConvert.entityToLoginResponse(token, userInfo);
     }
 
     public UserLoginResponseDTO.UserDetailResponseDTO register(UserRegisterCommandDTO commandDTO) {
-        System.out.println(JSONUtil.parseObj(commandDTO));
+        //System.out.println(JSONUtil.parseObj(commandDTO));
         //验证注册时两次输入密码是否一致
         if(!commandDTO.getPassword().equals(commandDTO.getConfirmPassword())) {
             throw new BusinessException("两次输入密码不一致");

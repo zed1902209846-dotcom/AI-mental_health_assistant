@@ -62,13 +62,10 @@ public class UserConvert {
         if (gender == null) {
             return "未知";
         }
-        switch (gender) {
-            case 1:
-                return "男";
-            case 2:
-                return "女";
-            default:
-                return "未知";
-        }
+        return switch (gender) {
+            case 1 -> "男";
+            case 2 -> "女";
+            default -> "未知";
+        };
     }
 }

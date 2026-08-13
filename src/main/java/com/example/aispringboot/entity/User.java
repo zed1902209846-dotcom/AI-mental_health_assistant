@@ -78,28 +78,28 @@ public class User {
 
     @TableField("updated_at")
     private LocalDateTime updatedAt;
-//
-//    /**
-//     * 是否为普通用户
-//     */
-//    public boolean isUser() {
-//        return UserType.USER.getCode().equals(this.userType);
-//    }
-//
+
+    /**
+     * 是否为普通用户
+     */
+    public boolean isUser() {
+        return UserType.USER.getCode().equals(this.userType);
+    }
+
     /**
      * 是否为正常状态
      */
     public boolean isActive() {
         return UserStatus.NORMAL.getCode().equals(this.status);
     }
-//
-//    /**
-//     * 是否被禁用
-//     */
-//    public boolean isDisabled() {
-//        return UserStatus.DISABLED.getCode().equals(this.status);
-//    }
-//
+
+    /**
+     * 是否被禁用
+     */
+    public boolean isDisabled() {
+        return UserStatus.DISABLED.getCode().equals(this.status);
+    }
+
     /**
      * 获取显示名称（优先显示昵称，否则显示用户名）
      */

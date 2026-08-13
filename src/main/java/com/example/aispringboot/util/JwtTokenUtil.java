@@ -7,10 +7,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.example.aispringboot.config.JwtConfig;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -25,7 +25,7 @@ public class JwtTokenUtil implements ApplicationContextAware  {
     private static ApplicationContext applicationContext;
     //用于在静态工具类中获取 Spring 容器管理的 Bean
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) {
         JwtTokenUtil.applicationContext = applicationContext;
     }
 
@@ -52,7 +52,6 @@ public class JwtTokenUtil implements ApplicationContextAware  {
                     .withIssuedAt(new Date())//设置签发时间
                     .withIssuer(ISSUER)//设置签发者
                     .sign(algorithm);//签名
-
             return token;
         }catch (Exception e){
             throw new RuntimeException("生成token失败:" + e);
@@ -81,8 +80,8 @@ public class JwtTokenUtil implements ApplicationContextAware  {
                 return token;
             }
             //备用方案(从请求头中获取 token)
-            String headerToken = extractTokenFromRequest(request);
-            return headerToken;
+            return extractTokenFromRequest(request);
+
         }
         return null;
     }
