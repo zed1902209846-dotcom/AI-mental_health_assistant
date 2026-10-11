@@ -1,6 +1,6 @@
 # AGENTS.md
 
-AI psychological-assistant backend. Spring Boot 3.5.15 / Java 17, Maven wrapper (`./mvnw`), base package `com.example.aispringboot`.
+AI psychological-assistant. All backend code lives in `backend/` (run every Maven command from there); the repo root is reserved for a future frontend. Spring Boot 3.5.15 / Java 17, Maven wrapper (`./mvnw`), base package `com.example.aispringboot`.
 
 ## Run / verify
 - Run: `./mvnw spring-boot:run`
@@ -8,7 +8,7 @@ AI psychological-assistant backend. Spring Boot 3.5.15 / Java 17, Maven wrapper 
 - No lint/format/typecheck step beyond the compiler; verify changes with `./mvnw -q compile`.
 
 ## Config (easy to miss)
-- `src/main/resources/application.yml` is gitignored. **It does not exist in the repo.** To run locally you must `cp application.yml.example application.yml`.
+- `backend/src/main/resources/application.yml` is gitignored. **It does not exist in the repo.** To run locally you must `cp application.yml.example application.yml`.
 - External secrets come from env vars: `DB_USERNAME`, `DB_PASSWORD`, `AI_API_KEY`, `JWT_SECRET`.
 - Requires a MySQL DB named `mental_health_assistant`; there is **no schema.sql / Flyway / Liquibase** — tables must exist already.
 - AI provider is OpenAI-compatible pointing at SiliconFlow (`base-url: https://api.siliconflow.cn`, model `deepseek-ai/DeepSeek-V3`). Server port 1236.
